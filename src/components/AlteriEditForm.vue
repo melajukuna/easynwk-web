@@ -1,7 +1,7 @@
 <template>
   <p class="label" v-if="addingNewAlter">{{ t("addcontact") }}</p>
   <p class="label" v-else>{{ t("editcontact") }}</p>
-  <form class="form" @submit.prevent="editAlterFinished">
+  <form class="form" :class="{ 'nwk-mehr-offen': mehrOffen }" @submit.prevent="editAlterFinished">
     <div class="field has-text-danger" v-if="invalidPosition">
       <span class="icon is-small">
         <font-awesome-icon icon="exclamation-triangle" />
@@ -62,6 +62,15 @@
       </div>
     </div>
 
+    <button
+      type="button"
+      class="button is-small nwk-mehr-knopf"
+      :aria-expanded="mehrOffen"
+      @click="mehrOffen = !mehrOffen"
+    >
+      {{ mehrOffen ? t("fewerdetails") : t("moredetails") }}
+    </button>
+
     <div class="field is-horizontal" v-if="emoji">
       <div class="field-label is-normal">
         <label class="label">Emoji</label>
@@ -82,7 +91,7 @@
       </div>
     </div>
 
-    <div class="field is-horizontal" v-if="emoji">
+    <div class="nwk-optional field is-horizontal" v-if="emoji">
       <div class="field-label is-normal">
         <label class="label">{{ t("selectEmoji") }}</label>
       </div>
@@ -122,7 +131,7 @@
       </div>
     </div>
 
-    <div class="field is-horizontal">
+    <div class="nwk-optional field is-horizontal">
       <div class="field-label">
         <label class="label checkbox" for="chk-human">{{ t("human") }}</label>
       </div>
@@ -133,7 +142,7 @@
       </div>
     </div>
 
-    <div v-if="alterHuman" class="field is-horizontal">
+    <div v-if="alterHuman" class="nwk-optional field is-horizontal">
       <div class="field-label is-normal">
         <label class="label" :title="t('altergender')">{{ t("gender") }}</label>
       </div>
@@ -154,7 +163,7 @@
       </div>
     </div>
 
-    <div v-else class="field is-horizontal">
+    <div v-else class="nwk-optional field is-horizontal">
       <div class="field-label is-normal">
         <label class="label">{{ t("category") }}</label>
       </div>
@@ -172,7 +181,7 @@
       </div>
     </div>
 
-    <div class="field is-horizontal">
+    <div class="nwk-optional field is-horizontal">
       <div class="field-label is-normal">
         <label class="label" :title="t('agetitle')">{{ t("age") }}</label>
       </div>
@@ -191,7 +200,7 @@
       </div>
     </div>
 
-    <div class="field is-horizontal">
+    <div class="nwk-optional field is-horizontal">
       <div class="field-label is-normal"></div>
       <div class="field-body">
         <label class="checkbox" :title="t('deceasedcheck')">
@@ -201,7 +210,7 @@
       </div>
     </div>
 
-    <div class="field is-horizontal">
+    <div class="nwk-optional field is-horizontal">
       <div class="field-label">
         <label class="label" :title="t('relationtitle')">{{
           t("relationship")
@@ -227,7 +236,7 @@
       </div>
     </div>
 
-    <div v-if="showQuality && alterEdgeType >= 1" class="field is-horizontal">
+    <div v-if="showQuality && alterEdgeType >= 1" class="nwk-optional field is-horizontal">
       <div class="field-label">
         <label class="label" for="chk-new-checkbox">{{
           t("conflictual")
@@ -244,7 +253,7 @@
       </div>
     </div>
 
-    <div v-if="showQuality && alterEdgeType >= 1" style="margin-bottom: 1.5em">
+    <div class="nwk-optional" v-if="showQuality && alterEdgeType >= 1" style="margin-bottom: 1.5em">
       <div
         class="field is-horizontal"
         v-for="(label, key) in supportOptions"
@@ -270,7 +279,7 @@
       </div>
     </div>
 
-    <div class="field">
+    <div class="nwk-optional field">
       <div class="control">
         <textarea
           class="textarea is-small"
@@ -512,10 +521,14 @@ export default defineComponent({
     const altername = ref<InstanceType<typeof HTMLInputElement> | null>(null);
     const domButton = ref<InstanceType<typeof HTMLButtonElement> | null>(null);
 
+    // Am Handy kommt die Tastatur erst nach dem Tippen in die Karte (NetzwerkKarte.vue), sonst deckt sie die Karte zu
+    const aufTouch = window.matchMedia("(pointer: coarse)").matches;
+    const mehrOffen = ref(props.alter ? hasOptionalChanges(props.alter as Alter) : false);
+
     watch(
       () => props.mapclicked,
       () => {
-        if (altername.value != null) {
+        if (!aufTouch && altername.value != null) {
           (altername.value as HTMLInputElement).focus();
         }
       }
@@ -547,7 +560,7 @@ export default defineComponent({
 
     onMounted(() => {
       // the DOM element will be assigned to the ref after initial render
-      if (altername.value != null) {
+      if (!aufTouch && altername.value != null) {
         (altername.value as HTMLInputElement).focus();
       }
 
@@ -603,6 +616,7 @@ export default defineComponent({
       genderOptions,
       roleOptions,
       engRoleOptions,
+      mehrOffen,
       editAlterFinished,
       cancelAddAlter,
       selectedEmoji,

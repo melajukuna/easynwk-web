@@ -158,6 +158,8 @@ export default {
         notesaboutcontact: "Notizen zum Kontakt",
         nextcontact: "Nächster Kontakt",
         close: "Schließen",
+        moredetails: "Mehr Angaben",
+        fewerdetails: "Weniger Angaben",
         editversiondata: "Titel und Datum der Karte bearbeiten",
         cancel: "Abbrechen",
         conflictual: "Konflikthaft",

@@ -208,6 +208,16 @@ export default defineComponent({
       zeigeQualitaeten: computed(() => store.state.view.qualityRelationship),
       mapclick: () => {
         mapclicked.value = !mapclicked.value;
+        // Am Handy kommt die Tastatur erst jetzt, die Stelle ist gesetzt. Das muss noch im Tippen passieren,
+        // später öffnet iOS die Tastatur nicht mehr.
+        const s = store.state.session;
+        if (
+          window.matchMedia("(pointer: coarse)").matches &&
+          s.editIndex != null &&
+          !store.state.nwk.alteri[s.editIndex]?.name
+        ) {
+          document.querySelector<HTMLInputElement>('.alteriform input[type="text"]')?.focus();
+        }
       },
     };
   },

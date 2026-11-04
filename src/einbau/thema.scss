@@ -8,6 +8,7 @@
   height: 100%;
   min-height: 0;
   padding: 72px 16px 16px;
+  touch-action: manipulation;
   color: var(--ink);
   font-size: var(--step--1);
   line-height: 1.4;
@@ -73,6 +74,10 @@
   .label { display: block; margin: 0; font-weight: 600; }
   .input, .textarea, .select select { display: block; width: 100%; min-height: 36px; padding: 7px 12px; border: 0; border-radius: 10px; background: var(--sunk); color: var(--ink); font: inherit; font-size: var(--step--1); }
   .textarea { min-height: 72px; resize: vertical; }
+  // Unter 16 Pixeln zoomt iOS beim Antippen die ganze Seite heran und bleibt dort
+  @media (pointer: coarse), (max-width: 900px) {
+    .input, .textarea, .select select, input:not([type="checkbox"], [type="radio"], [type="range"]), select, textarea { font-size: 16px; }
+  }
   .select { display: block; position: relative; width: 100%; }
   .checkbox, .radio { display: inline-flex; flex-direction: row; align-items: center; gap: 6px; font-weight: 400; cursor: pointer; }
   .radio-group { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding-top: 2px; border: 0; }
@@ -80,9 +85,9 @@
   .field.is-horizontal:has(> .field-body input[type="checkbox"]) > .field-label { padding-top: 0; }
   .field.is-horizontal:has(> .field-body .radio-group) > .field-label { padding-top: 2px; }
   .alteriform > .label { margin-bottom: 12px; }
-  // Neben der Karte reicht der Hinweis auf der Karte, am Handy liegt sie oft außer Sicht
-  .alteriform .form > .field.has-text-danger { display: none; color: var(--muted); }
-  .alteriform .form > .field.has-text-danger .icon { display: none; }
+  // Der Hinweis auf der Karte reicht, die Karte bleibt bis zum Tippen des Namens sichtbar
+  .alteriform .form > .field.has-text-danger { display: none; }
+  .nwk-mehr-knopf { display: none; }
   #record-settings { width: 100%; }
   .panel-block.form > .field.is-horizontal { display: block; }
   #record-settings .control > .field.is-horizontal:not(:has(> .field-label)) { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
@@ -123,20 +128,35 @@
   &.nwk-lesen .panel-heading .button { display: none; }
   &.nwk-lesen .panel-heading .buttons, &.nwk-lesen .panel-block > .buttons, &.nwk-lesen #ego .button { display: none; }
 
-  @media (max-width: 900px) {
+  // Handy und Tablet hochkant: Karte oben, Kontakte unten. Quer bleibt es nebeneinander, sonst wird die Karte winzig.
+  @media (max-width: 900px) and (orientation: portrait), (max-width: 640px) {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: minmax(0, 52%) minmax(0, 1fr);
-    gap: 10px;
-    padding: 64px 10px 10px;
+  }
 
-    .alteriform .form > .field.has-text-danger { display: block; }
+  @media (max-width: 900px) {
+    gap: 10px;
+    padding: 64px max(10px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(10px, env(safe-area-inset-left, 0px));
+
     .nwk-karten-hinweis { top: 26px; padding: 3px 10px; font-size: .75rem; }
+    #nwkmap text { font-size: 6px; }
+    // Selten gebrauchte Angaben klappen ein, damit die Knöpfe ohne Scrollen erreichbar bleiben
+    .form:not(.nwk-mehr-offen) .nwk-optional { display: none; }
+    .nwk-mehr-knopf { display: inline-flex; margin: 0 0 10px; }
+    .alteriform .help { display: none; }
     .nwk-karte { padding: 4px; }
   }
 }
 
 // Druckansicht: Karte und Liste liegen kurz als Kopie am Ende der Seite, alles andere bleibt aus dem Druck
 .nwk-druck { display: none; }
+// In der App liegt die Leiste unter der Kamera-Aussparung, die Karte beginnt darunter
+.app-modus .nwk { padding-top: calc(64px + env(safe-area-inset-top, 0px)); }
+// Unter dem kleinen Video lässt sich alles hervorscrollen
+@media (max-width: 900px) {
+  .app-modus .nwk .nwk-seite { padding-bottom: 130px; }
+}
+
 // Bild und Ausdruck sind immer hell, auch wenn die Seite gerade dunkel ist (Werte wie :root in der Plattform)
 .nwk-hell {
   --surface: #FFFFFF; --sunk: #E5E5EA; --ink: #1C1C1E; --muted: #6E6E73; --line: rgba(60, 60, 67, .18);

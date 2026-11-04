@@ -157,6 +157,8 @@ export default {
         notesaboutcontact: "Notes about contact",
         nextcontact: "Next contact",
         close: "Close",
+        moredetails: "More details",
+        fewerdetails: "Fewer details",
         editversiondata: "Edit title and date of the map",
         cancel: "Cancel",
         conflictual: "Conflictual",

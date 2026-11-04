@@ -118,7 +118,7 @@
             width="3"
             :style="{ color: smark.m.selected ? 'var(--accent)' : 'var(--muted)' }"
             :x="
-              smark.m.x < 0
+              linksVomPunkt(smark.m)
                 ? smark.m.x - 0.7 * iconSize - 4 * (smark.icons.length - i) + 1
                 : smark.m.x + 0.7 * iconSize + 4 * i
             "
@@ -169,26 +169,22 @@
           vector-effect="non-scaling-stroke"
           :x="mark.x"
           :y="mark.y"
-          :text-anchor="mark.x < 0 ? 'end' : 'start'"
-          :dx="mark.x < 0 ? -0.7 * iconSize : 0.7 * iconSize"
+          :text-anchor="linksVomPunkt(mark) ? 'end' : 'start'"
+          :dx="linksVomPunkt(mark) ? -0.7 * iconSize : 0.7 * iconSize"
           :dy="mark.y < 0 ? -1 : 4"
         >
-          {{ mark.label }}
-          {{ showAge && mark.d.age.length >= 1 ? "/ " + mark.d.age : "" }}
-          {{ showRole ? " / " + getRoleShort(mark.d.role) : "" }}
+          {{ beschriftung(mark) }}
         </text>
         <text
           v-if="alteriNames"
           :style="{ 'font-size': labelSize + 'px' }"
           :x="mark.x"
           :y="mark.y"
-          :text-anchor="mark.x < 0 ? 'end' : 'start'"
-          :dx="mark.x < 0 ? -0.7 * iconSize : 0.7 * iconSize"
+          :text-anchor="linksVomPunkt(mark) ? 'end' : 'start'"
+          :dx="linksVomPunkt(mark) ? -0.7 * iconSize : 0.7 * iconSize"
           :dy="mark.y < 0 ? -1 : 4"
         >
-          {{ mark.label }}
-          {{ showAge && mark.d.age.length >= 1 ? "/ " + mark.d.age : "" }}
-          {{ showRole ? " / " + getRoleShort(mark.d.role) : "" }}
+          {{ beschriftung(mark) }}
         </text>
       </g>
 
@@ -338,7 +334,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, onMounted, ref, watch } from "vue";
+import { defineComponent, computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useStore } from "@/store";
 
 import NetworkMapCoordinates from "@/components/NetworkMapCoordinates.vue";
@@ -728,6 +724,40 @@ export default defineComponent({
       return getRoleAbbrev(role);
     };
 
+    // Am Handy wäre die Schrift sonst rund 8 Pixel klein (Heiners Test, 04.11.2026)
+    const schmalAbfrage = window.matchMedia("(max-width: 900px)");
+    const schmal = ref(schmalAbfrage.matches);
+    const schmalGeaendert = (e: MediaQueryListEvent) => {
+      schmal.value = e.matches;
+    };
+    schmalAbfrage.addEventListener("change", schmalGeaendert);
+    onUnmounted(() => schmalAbfrage.removeEventListener("change", schmalGeaendert));
+    const labelSize = computed(
+      () => store.state.view.labelSizeInNwk * (schmal.value ? 1.5 : 1)
+    );
+    const iconSize = computed(
+      () => store.state.view.iconSizeInNwk * (schmal.value ? 1.4 : 1)
+    );
+
+    /** Name, Alter und Rolle. Eine frei eingetragene Rolle hat kein Kürzel, dann steht sie selbst da, nie doppelt. */
+    const beschriftung = (mark: AlterMark): string => {
+      const teile = [mark.label];
+      if (store.state.view.ageInNwk && mark.d.age.length >= 1) teile.push(mark.d.age);
+      if (store.state.view.roleInNwk) {
+        const kurz = getRoleShort(mark.d.role);
+        const rolle = kurz === "X" ? mark.d.role : kurz;
+        if (rolle && rolle !== mark.label) teile.push(rolle);
+      }
+      return teile.filter((t) => t).join(" / ");
+    };
+
+    /** Die Beschriftung darf nicht aus der Karte laufen: Nahe am Rand wechselt sie die Seite des Punkts. */
+    const linksVomPunkt = (mark: AlterMark): boolean => {
+      const breite =
+        beschriftung(mark).length * labelSize.value * 0.56 + 0.7 * iconSize.value;
+      return mark.x < 0 ? mark.x - breite >= -106 : mark.x + breite > 106;
+    };
+
     let clickTimeoutId: number | null = null;
     const clickAlter = (alter: Alter) => {
       if (isConnectMode.value && store.state.session.editIndex != null) {
@@ -785,6 +815,8 @@ export default defineComponent({
       const buffer: Array<AlterMark> = [];
       store.state.nwk.alteri.forEach((el) => {
         // console.log("alter: " + el.name);
+        // Ein neuer Kontakt ohne Stelle gehört noch nicht in die Karte, sonst steht er in der Mitte
+        if (!(el.distance > 0)) return;
         const coords = alteriCoords.value.get(el.id);
 
         buffer.push({
@@ -903,8 +935,10 @@ export default defineComponent({
       filteredAlteriMarks,
       alteriSupportMarks,
       connectionMarks,
-      labelSize: computed(() => store.state.view.labelSizeInNwk),
-      iconSize: computed(() => store.state.view.iconSizeInNwk),
+      labelSize,
+      iconSize,
+      beschriftung,
+      linksVomPunkt,
       iconTranslate: computed(
         () =>
           `translate(${store.state.view.iconSizeInNwk / -2},${
