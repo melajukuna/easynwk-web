@@ -520,6 +520,10 @@ export default defineComponent({
     ]);
 
     function initBrushBehavior() {
+      // Am Handy verschiebt ein Finger die Karte und zwei zoomen. Das Auswahl-Rechteck gibt es nur mit der Maus,
+      // Verbindungen gehen dort über den Knopf „Beziehungen“ (Heiners Test, 04.11.2026).
+      if (window.matchMedia("(pointer: coarse)").matches) return;
+
       brush
         .on("start", () => {
           // when brush is changed (e.g. resized) -> hide buttons

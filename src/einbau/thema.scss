@@ -140,6 +140,8 @@
     padding: 64px max(10px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(10px, env(safe-area-inset-left, 0px));
 
     .nwk-karten-hinweis { top: 26px; padding: 3px 10px; font-size: .75rem; }
+    // In der Mitte verdeckt der Knopf keine der beiden Beschriftungen unten
+    .nwk-karte #zoomBtns { right: auto; inset-inline-end: auto; left: 50%; bottom: 4px; transform: translateX(-50%); }
     #nwkmap text { font-size: 6px; }
     // Selten gebrauchte Angaben klappen ein, damit die Knöpfe ohne Scrollen erreichbar bleiben
     .form:not(.nwk-mehr-offen) .nwk-optional { display: none; }
