@@ -430,13 +430,14 @@ export default defineComponent({
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       zoomBehavior
+        // Zweite Ecke, keine Größe: Mit 212 ließ sich die Karte verschieben und blieb auch ohne Zoom versetzt
         .extent([
           [-106, -106],
-          [212, 212],
+          [106, 106],
         ])
         .translateExtent([
           [-106, -106],
-          [212, 212],
+          [106, 106],
         ])
         .scaleExtent([1, 8])
         .on("zoom", zoomed);

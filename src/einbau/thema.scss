@@ -21,7 +21,8 @@
   .nwk-i-2x { width: 1.6em; height: 1.6em; }
 
   // Karte
-  .nwk-karte { position: relative; min-width: 0; min-height: 0; display: flex; align-items: center; justify-content: center; padding: 12px; background: var(--surface); border-radius: var(--r-lg); box-shadow: var(--shadow), 0 0 0 .5px var(--line); }
+  // Gezoomt endet die Karte an ihrer Fläche und zeichnet nicht über Leiste und Spalte
+  .nwk-karte { position: relative; overflow: hidden; min-width: 0; min-height: 0; display: flex; align-items: center; justify-content: center; padding: 12px; background: var(--surface); border-radius: var(--r-lg); box-shadow: var(--shadow), 0 0 0 .5px var(--line); }
   #nwkmap { display: block; width: 100%; height: 100%; max-height: 100%; }
   #zoomBtns { position: absolute; inset-inline-end: 12px; bottom: 12px; }
   #zoomBtns .button:disabled { visibility: hidden; }
@@ -172,6 +173,7 @@
   .nwk-druck p { margin: 0 0 8pt; }
   .nwk-druck svg { display: block; width: 100%; max-height: 62vh; break-after: page; }
   .nwk-druck #position { display: none; }
+  .nwk-druck #nwkmap { overflow: hidden; }
   .nwk-drucktabelle { width: 100%; border-collapse: collapse; }
   .nwk-drucktabelle th, .nwk-drucktabelle td { padding: 3pt 5pt; border: .5pt solid #999; text-align: start; vertical-align: top; }
 }
