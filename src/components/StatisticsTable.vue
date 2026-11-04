@@ -140,11 +140,11 @@ export default defineComponent({
           ? alteri.map((a) => store.getters["displayName"](a)).join(", ") +
               " (" +
               networkAnalysis.value.maxDegree +
-              " Beziehungen)"
+              (networkAnalysis.value.maxDegree === 1 ? " Beziehung)" : " Beziehungen)")
           : alteri.map((a) => store.getters["displayName"](a)).join(", ") +
               " (" +
               networkAnalysis.value.maxDegree +
-              " relations)";
+              (networkAnalysis.value.maxDegree === 1 ? " relation)" : " relations)");
       } else {
         return document.documentElement.lang == "de" ? "keine" : "none";
       }
