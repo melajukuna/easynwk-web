@@ -1,6 +1,5 @@
 import { InjectionKey } from "vue";
 import {
-  createLogger,
   createStore,
   useStore as baseUseStore,
   Store,
@@ -14,7 +13,9 @@ import { ViewOptions } from "@/data/ViewOptions";
 
 import { applyAdaptiveNWKDefaults } from "./adaptiveNWKDefaults";
 
-import { IUnReDoState, localStoragePlugin } from "./localStoragePlugin";
+import { IUnReDoState } from "./localStoragePlugin";
+import { abgleichPlugin } from "@/einbau/abgleichPlugin";
+import { istGueltig, neueId } from "@/einbau/abgleich.js";
 import { editAlter, nwkModule } from "./nwkModule";
 import { pseudonymPlugin, PseudonymState } from "./pseudonymPlugin";
 import { viewOptionsModule } from "./viewSettingsModule";
@@ -60,6 +61,34 @@ const getters = {
 const mutations = {
   ...nwkRecordMutationsAtRoot, // import mutations related to NWKRecord
 
+  /** Stand aus dem Yjs-Dokument übernehmen. Entwürfe ohne Namen oder Position bleiben, das offene Formular auch. */
+  einbauAnwenden(state: IStoreState, record: NWKRecord): void {
+    const offen =
+      state.session.editIndex != null
+        ? state.nwk.alteri[state.session.editIndex]?.id
+        : null;
+    const version =
+      record.versions.find((v) => v.id === record.currentVersion) ??
+      record.versions[0];
+    if (!version) return;
+    const drin = new Set(version.nwk.alteri.map((a) => a.id));
+    const lokal = new Map(state.nwk.alteri.map((a) => [a.id, a]));
+    version.nwk.alteri = [
+      ...state.nwk.alteri.filter((a) => !drin.has(a.id) && !istGueltig(a)),
+      ...version.nwk.alteri.map((a) => {
+        const hier = lokal.get(a.id);
+        return hier && !istGueltig(hier) ? hier : a;
+      }),
+    ];
+    state.record = record;
+    state.nwk = version.nwk;
+    if (offen != null) {
+      const index = state.nwk.alteri.findIndex((a) => a.id === offen);
+      state.session.editIndex = index >= 0 ? index : null;
+      if (index < 0) state.session.editTab = "";
+    }
+  },
+
   addAlter(state: IStoreState, initialValues: Partial<Alter> = {}): void {
     // initialize alter with default values and optionally with the passed values
     const newAlter = {
@@ -68,26 +97,8 @@ const mutations = {
     };
     applyAdaptiveNWKDefaults(newAlter, initialValues);
 
-    // set id depending on alteri in list
-    // bugfix: if any id is undefined, NaN, or null --> default to 1
-    const maxIdNWK =
-      state.nwk.alteri.length > 0
-        ? Math.max(...state.nwk.alteri.map((v) => (v.id ? v.id : 1)))
-        : 0;
-
-    const maxIdRecord =
-      state.record.versions.length > 0
-        ? Math.max(
-            ...state.record.versions.map((v) =>
-              v.nwk.alteri.length > 0
-                ? Math.max(...v.nwk.alteri.map((v) => (v.id ? v.id : 1)))
-                : 0
-            )
-          )
-        : 0;
-
-    // console.log(`max id nwk:  ${maxIdNWK}  -- max id record:  ${maxIdRecord} `);
-    newAlter.id = Math.max(maxIdNWK, maxIdRecord) + 1;
+    // Zählen geht nicht mehr: Zwei Menschen können im Raum gleichzeitig Personen anlegen
+    newAlter.id = neueId();
 
     // new alter is always added on top of list
     state.nwk.alteri.unshift(newAlter);
@@ -148,13 +159,9 @@ const mutations = {
   },
 };
 
-const plugins =
-  process.env.NODE_ENV !== "production"
-    ? [createLogger(), localStoragePlugin, pseudonymPlugin]
-    : [localStoragePlugin, pseudonymPlugin];
+const plugins = [abgleichPlugin, pseudonymPlugin];
 
 export const store = createStore<IStoreState>({
-  strict: process.env.NODE_ENV !== "production",
   modules: {
     nwk: nwkModule,
     record: nwkRecordModule,

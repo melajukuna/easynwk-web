@@ -140,11 +140,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
-.right {
-  float: right;
-}
-
+<style scoped lang="scss">
 .support {
   margin: 1em;
   display: inline-flex;
@@ -152,7 +148,7 @@ export default defineComponent({
 }
 
 .ico {
-  color: #afafaf;
+  color: var(--muted);
   margin-right: 0.5em;
 }
 

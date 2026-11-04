@@ -181,7 +181,7 @@ export default defineComponent({
 }
 
 .panel-block.selected {
-  background: rgba($fhstpblue, 0.2);
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
 }
 
 .panel-block.selected > span {
@@ -204,6 +204,6 @@ export default defineComponent({
 }
 
 .autovalue {
-  color: #656565;
+  color: var(--muted);
 }
 </style>

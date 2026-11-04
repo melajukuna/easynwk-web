@@ -75,7 +75,6 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-@import "~bulma/sass/base/_all.sass";
 
 text {
   font-family: $family-primary;
@@ -86,12 +85,12 @@ text {
 
 #sectors text {
   font-weight: bold;
-  fill: gray;
+  fill: var(--muted);
   cursor: zoom-in;
 }
 
 rect {
-  fill: white;
+  fill: var(--surface);
   fill-opacity: 0.25;
   cursor: zoom-in;
 }

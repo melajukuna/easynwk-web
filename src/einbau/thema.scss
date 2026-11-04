@@ -1,0 +1,131 @@
+// Aussehen im Beratungsraum: ersetzt Bulma. Dieselben Klassennamen wie im Original, damit die Vorlagen unverändert bleiben
+// und sich Updates der FH St. Pölten leicht übernehmen lassen. Farben, Schrift und Abstände kommen von der Plattform,
+// hell und dunkel von selbst. Alles gilt nur innerhalb von .nwk, der Rest der Seite bleibt unberührt.
+.nwk {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 380px);
+  gap: 16px;
+  height: 100%;
+  min-height: 0;
+  padding: 72px 16px 16px;
+  color: var(--ink);
+  font-size: var(--step--1);
+  line-height: 1.4;
+  text-align: start;
+
+  *, *::before, *::after { box-sizing: border-box; }
+  p { margin: 0; }
+
+  .nwk-i { display: block; width: 1.25em; height: 1.25em; flex: none; }
+  .nwk-i-2x { width: 1.6em; height: 1.6em; }
+
+  // Karte
+  .nwk-karte { position: relative; min-width: 0; min-height: 0; display: flex; align-items: center; justify-content: center; padding: 12px; background: var(--surface); border-radius: var(--r-lg); box-shadow: var(--shadow), 0 0 0 .5px var(--line); }
+  #nwkmap { display: block; width: 100%; height: 100%; max-height: 100%; }
+  #zoomBtns { position: absolute; inset-inline-end: 12px; bottom: 12px; }
+  #brushBtns { position: absolute; visibility: hidden; top: 0; right: 0; }
+  #brushBtns > button { display: flex; margin-bottom: 6px; }
+
+  // Seitenspalte
+  .nwk-seite { display: flex; flex-direction: column; gap: 10px; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 1px; scrollbar-width: thin; }
+  .nwk-kopf { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 10px; padding: 10px 14px; flex: none; }
+  .nwk-kopf #ego { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; min-width: 0; overflow-wrap: anywhere; }
+  .nwk-quelle { padding: 0 6px 6px; font-size: .75rem; color: var(--muted); }
+
+  // Panels
+  .panel { flex: none; background: var(--surface); border-radius: var(--r); box-shadow: var(--shadow), 0 0 0 .5px var(--line); }
+  .panel-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 14px; font-size: var(--step-0); font-weight: 650; cursor: pointer; -webkit-user-select: none; user-select: none; }
+  .panel-block { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; padding: 8px 14px; border-top: .5px solid var(--line); overflow-wrap: anywhere; }
+  .panel-block:empty, .panel-block:not(:has(*)):not(:has(> span)) { padding: 0; border: 0; }
+  .panel-block:has(> .flex-cont:empty), .panel-block.form:has(.field-body:empty) { display: none; }
+  .right { margin-inline-start: auto; }
+  .clickAble { cursor: pointer; }
+  .flex-cont { display: flex; flex-wrap: wrap; gap: 8px 20px; width: 100%; }
+
+  // Knöpfe wie auf der Plattform
+  .button { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 34px; padding: 0 14px; border: 0; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font: inherit; font-size: var(--step--1); font-weight: 600; text-decoration: none; cursor: pointer; transition: transform .25s var(--ease), filter .15s; touch-action: manipulation; }
+  .button:active { transform: scale(.97); transition-duration: 80ms; }
+  .button[disabled] { opacity: .4; cursor: default; }
+  .button.is-small, .buttons.are-small .button { min-height: 30px; padding: 0 10px; }
+  .button.is-primary { background: var(--accent); color: var(--accent-ink); }
+  .button.is-danger { background: var(--crisis-soft); color: var(--crisis); }
+  .button.is-light { background: var(--sunk); color: var(--ink); }
+  .button.is-active { background: var(--accent); color: var(--accent-ink); }
+  .button.is-fullwidth { width: 100%; }
+  @media (hover: hover) { .button:not([disabled]):hover { filter: brightness(1.05); } }
+  .buttons { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+  .buttons.is-centered, .is-grouped-centered { justify-content: center; }
+  .icon { display: inline-flex; align-items: center; justify-content: center; flex: none; }
+  .has-text-danger { color: var(--crisis); }
+  .has-text-link { color: var(--accent); }
+
+  // Formulare
+  .field { display: block; width: 100%; margin: 0 0 10px; }
+  .field:last-child { margin-bottom: 0; }
+  .field.is-horizontal { display: grid; grid-template-columns: minmax(84px, 30%) minmax(0, 1fr); align-items: start; gap: 4px 10px; }
+  .field.is-grouped { display: flex; flex-wrap: wrap; gap: 8px; }
+  .field-label { padding-top: 8px; font-weight: 600; }
+  .field-body { display: flex; flex-wrap: wrap; gap: 8px; min-width: 0; }
+  .field-body > .field { flex: 1 1 100%; margin: 0; }
+  .control { position: relative; min-width: 0; }
+  .label { display: block; margin: 0; font-weight: 600; }
+  .input, .textarea, .select select { display: block; width: 100%; min-height: 36px; padding: 7px 12px; border: 0; border-radius: 10px; background: var(--sunk); color: var(--ink); font: inherit; font-size: var(--step--1); }
+  .textarea { min-height: 72px; resize: vertical; }
+  .input.is-danger, .textarea.is-danger { outline: 2px solid var(--crisis); }
+  .select { display: block; position: relative; width: 100%; }
+  .checkbox, .radio { display: inline-flex; flex-direction: row; align-items: center; gap: 6px; font-weight: 400; cursor: pointer; }
+  .radio + .radio { margin-inline-start: 10px; }
+  .help { margin-top: 3px; font-size: .8125rem; color: var(--muted); }
+  .help.is-danger { color: var(--crisis); }
+  .title { font-size: var(--step-1); font-weight: 650; }
+  .block { margin-bottom: 8px; }
+  .columns { display: flex; flex-wrap: wrap; gap: 8px; }
+  .column { flex: 1 1 0; min-width: 0; }
+  .tab { min-height: 30px; }
+  .panel-tabs { display: flex; gap: 4px; padding: 6px 14px 0; border-top: .5px solid var(--line); }
+  .panel-tabs a { padding: 4px 8px; border-radius: 8px; color: var(--muted); text-decoration: none; cursor: pointer; }
+  .panel-tabs a.is-active { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+  .notification { padding: 10px 12px; border-radius: 12px; background: var(--warn-soft); }
+
+  // Tabellen der Kennzahlen
+  .table { width: 100%; border-collapse: collapse; font-size: .8125rem; font-variant-numeric: tabular-nums; }
+  .table th, .table td { padding: 5px 6px; border-top: .5px solid var(--line); text-align: start; vertical-align: top; font-weight: 400; }
+  .table th { font-weight: 600; }
+  .table em { display: block; color: var(--muted); font-style: normal; }
+
+  // Fenster und Auswahl
+  .modal { position: fixed; inset: 0; z-index: 70; display: none; place-items: center; padding: 16px; }
+  .modal.is-active { display: grid; }
+  .modal-background { position: absolute; inset: 0; background: rgba(0, 0, 0, .4); }
+  .modal-content { position: relative; width: min(560px, 100%); max-height: 86dvh; overflow: auto; padding: 20px; background: var(--surface); border-radius: var(--r-lg); }
+  .dropdown { position: relative; display: inline-block; }
+  .dropdown-menu { position: absolute; z-index: 20; display: none; inset-block-start: 100%; inset-inline-start: 0; padding-top: 4px; }
+  .dropdown.is-active .dropdown-menu { display: block; }
+
+  // Nur lesen: abgeschlossener Raum
+  &.nwk-lesen .nwk-karte svg { pointer-events: none; }
+  &.nwk-lesen .panel-heading .buttons, &.nwk-lesen .panel-block > .buttons, &.nwk-lesen #ego .button { display: none; }
+
+  @media (max-width: 900px) {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 52%) minmax(0, 1fr);
+    gap: 10px;
+    padding: 64px 10px 10px;
+
+    .nwk-karte { padding: 4px; }
+  }
+}
+
+// Druckansicht: Karte und Liste liegen kurz als Kopie am Ende der Seite, alles andere bleibt aus dem Druck
+.nwk-druck { display: none; }
+@media print {
+  body > :not(.nwk-druck) { display: none !important; }
+  .nwk-druck { display: block; color: #000; font-size: 11pt; }
+  .nwk-druck h1 { margin: 0 0 4pt; font-size: 18pt; }
+  .nwk-druck h2 { margin: 12pt 0 4pt; font-size: 13pt; }
+  .nwk-druck p { margin: 0 0 8pt; }
+  .nwk-druck svg { display: block; width: 100%; max-height: 62vh; break-after: page; }
+  .nwk-druck #position { display: none; }
+  .nwk-drucktabelle { width: 100%; border-collapse: collapse; }
+  .nwk-drucktabelle th, .nwk-drucktabelle td { padding: 3pt 5pt; border: .5pt solid #999; text-align: start; vertical-align: top; }
+}

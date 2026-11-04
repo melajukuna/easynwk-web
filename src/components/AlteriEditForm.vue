@@ -637,7 +637,6 @@ input::-webkit-calendar-picker-indicator {
   margin-left: 0;
 }
 
-@import "~bulma/sass/base/_all.sass";
 .autovalue {
   color: #656565;
 }

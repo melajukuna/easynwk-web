@@ -3,6 +3,7 @@ import { IStoreState } from ".";
 import { NWKRecord, initNWKRecord, loadNWKRecord } from "@/data/NWKRecord";
 import { initNWK } from "@/data/NWK";
 import { NWKVersion, initNWKVersion } from "@/data/NWKVersion";
+import { neueId } from "@/einbau/abgleich.js";
 
 const state = JSON.parse(loadNWKRecordStateFromStore());
 
@@ -47,8 +48,6 @@ export const nwkRecordMutationsAtRoot = {
 
         if (newVersion) {
           state.nwk = newVersion.nwk;
-          console.log("new version id: " + newVersion.id);
-          console.log("current version id: " + state.record.currentVersion);
         }
       }
     } else {
@@ -86,11 +85,8 @@ export const nwkRecordMutationsAtRoot = {
     ensureNWKisLinkedInRecord(state);
 
     const newVersion = initNWKVersion();
-    // set id depending on versions in list
-    newVersion.id =
-      state.record.versions.length > 0
-        ? Math.max(...state.record.versions.map((v) => (v.id ? v.id : 1))) + 1
-        : 1;
+    // Zählen geht nicht mehr: Zwei Menschen können im Raum gleichzeitig Fassungen anlegen
+    newVersion.id = neueId();
     if (duplicateAll) {
       newVersion.nwk = structuredClone(state.nwk);
     } else {

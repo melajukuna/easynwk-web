@@ -115,7 +115,6 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-@import "~bulma/sass/base/_all.sass";
 
 .versionText {
   font-size: 4px;

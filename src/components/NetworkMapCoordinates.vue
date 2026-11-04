@@ -97,38 +97,36 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-@import "~bulma/sass/base/_all.sass";
 
 text {
-  font-family: $family-primary;
+  font-family: inherit;
   font-size: 4px;
   -webkit-user-select: none; /* Safari */
   user-select: none;
 }
 
 circle#horizon-base {
-  // fill: #dadaeb;
-  fill: #c7e9c0;
+  fill: var(--accent-soft);
 }
 
 circle#horizon-overlay {
-  fill: rgb(255, 255, 255, 0.5);
+  fill: color-mix(in srgb, var(--surface) 50%, transparent);
 }
 
 #coords line {
-  stroke: white;
+  stroke: var(--surface);
   stroke-width: 2;
 }
 
 #coords-min line {
   vector-effect: non-scaling-stroke;
-  stroke: lightgray;
+  stroke: var(--line);
   stroke-width: 1;
 }
 
 #coords-min circle {
   vector-effect: non-scaling-stroke;
-  stroke: #f0f0f0;
+  stroke: var(--line);
   stroke-width: 2;
   fill: none;
 }

@@ -37,7 +37,6 @@ export const pseudonymPlugin = (store: Store<IStoreState>): void => {
 
         // toggling pseudonyms on --> create for existing alteri
         for (const alter of stateAfter.nwk.alteri) {
-          console.log("add pseudo for " + alter.name);
           pseudonyms.set(alter.id, generator.makePseudonym(alter.role));
         }
       } else {
@@ -47,7 +46,14 @@ export const pseudonymPlugin = (store: Store<IStoreState>): void => {
       }
     } else if (stateAfter.pseudonym.active) {
       // while pseudonyms are shown
-      if (mutation.type === "loadNWK") {
+      if (mutation.type === "einbauAnwenden") {
+        // Personen, die jemand anderes angelegt hat
+        for (const alter of stateAfter.nwk.alteri) {
+          if (!pseudonyms.has(alter.id)) {
+            pseudonyms.set(alter.id, generator.makePseudonym(alter.role));
+          }
+        }
+      } else if (mutation.type === "loadNWK") {
         // loadNWK --> throw away & fill
         generator.reset();
         pseudonyms.clear();
@@ -73,9 +79,6 @@ export const pseudonymPlugin = (store: Store<IStoreState>): void => {
           if (
             !(currPseudo && currPseudo.startsWith(getRoleAbbrev(alter.role)))
           ) {
-            console.log(
-              "update pseudonym for " + alter.name + " from " + currPseudo
-            );
             pseudonyms.set(alter.id, generator.makePseudonym(alter.role));
           }
         }

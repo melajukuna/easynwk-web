@@ -20,18 +20,6 @@
         <font-awesome-icon icon="redo" />
       </span>
     </button>
-    <button
-      class="button is-small"
-      :title="t('fullscreen')"
-      @click="toggleFullScreen"
-      v-if="canFullscreen()"
-    >
-      <span class="icon">
-        <font-awesome-icon
-          :icon="isFullScreen ? 'compress-arrows-alt' : 'expand-arrows-alt'"
-        />
-      </span>
-    </button>
   </div>
 </template>
 

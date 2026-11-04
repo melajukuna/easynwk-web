@@ -261,8 +261,4 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
-.right {
-  float: right;
-}
-</style>
+

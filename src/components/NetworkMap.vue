@@ -36,8 +36,8 @@
         />
       </symbol>
       <radialGradient id="selected-gradient">
-        <stop offset="60%" stop-color="rgb(28, 135, 230)" stop-opacity="0.25" />
-        <stop offset="100%" stop-color="rgb(28, 135, 230)" stop-opacity="0" />
+        <stop offset="60%" style="stop-color: var(--accent)" stop-opacity="0.25" />
+        <stop offset="100%" style="stop-color: var(--accent)" stop-opacity="0" />
       </radialGradient>
       <filter id="dilate-and-xor">
         <!-- h/t https://stackoverflow.com/a/63287731/1140589 -->
@@ -120,7 +120,7 @@
             :icon="ico"
             height="3"
             width="3"
-            :style="{ color: smark.m.selected ? '#1c87e6' : '#afafaf' }"
+            :style="{ color: smark.m.selected ? 'var(--accent)' : 'var(--muted)' }"
             :x="
               smark.m.x < 0
                 ? smark.m.x - 0.7 * iconSize - 4 * (smark.icons.length - i) + 1
@@ -137,7 +137,7 @@
           :x2="smark.m.x"
           :y2="smark.m.y"
           :filter="smark.m.d.edgeType == 2 ? 'url(#dilate-and-xor)' : undefined"
-          :style="smark.m.d.conflict ? 'stroke: red' : 'stroke: #afafaf'"
+          :style="smark.m.d.conflict ? 'stroke: var(--crisis)' : 'stroke: var(--muted)'"
           marker-end="url(#arrowheadAlter)"
         />
         <line
@@ -148,7 +148,7 @@
           :x2="smark.m.x"
           :y2="smark.m.y"
           :filter="smark.m.d.edgeType == 2 ? 'url(#dilate-and-xor)' : undefined"
-          :style="smark.m.d.conflict ? 'stroke: red' : 'stroke: #afafaf'"
+          :style="smark.m.d.conflict ? 'stroke: var(--crisis)' : 'stroke: var(--muted)'"
           marker-end="url(#arrowheadMe)"
         />
       </g>
@@ -163,7 +163,7 @@
           :y2="mark.y"
           :filter="mark.d.edgeType == 2 ? 'url(#dilate-and-xor)' : undefined"
           :style="
-            mark.d.conflict && showQuality ? 'stroke: red' : 'stroke: #afafaf'
+            mark.d.conflict && showQuality ? 'stroke: var(--crisis)' : 'stroke: var(--muted)'
           "
         />
         <text
@@ -958,14 +958,14 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-@import "~bulma/sass/base/_all.sass";
 
 svg {
   overflow: visible;
 }
 
 text {
-  font-family: $family-primary;
+  font-family: inherit;
+  fill: var(--ink);
   font-size: 4px;
   -webkit-user-select: none; /* Safari */
   user-select: none;
@@ -976,36 +976,36 @@ text.ego {
 }
 
 .textbg {
-  stroke: white;
+  stroke: var(--surface);
   stroke-width: 3;
 }
 
 line {
-  stroke: #afafaf;
+  stroke: var(--muted);
   stroke-width: 0.5;
 }
 
 line.select {
   // stroke: rgb(136, 159, 213);
   // stroke: rgb($fhstpblue, 0.6);
-  stroke: #1c87e6; // rgb(28, 135, 230);
+  stroke: var(--accent);
   stroke-dasharray: 5, 1;
   //altes blau rgb(102, 150, 192);
 }
 
 #position {
-  fill: white;
+  fill: var(--surface);
   fill-opacity: 0.01;
   cursor: crosshair;
 }
 
 #ego {
-  fill: $color-primary-0;
+  fill: var(--accent);
 }
 
 use.mark {
-  fill: rgb(54, 54, 54);
-  stroke: white;
+  fill: var(--ink);
+  stroke: var(--surface);
   stroke-width: 0.2;
 }
 
@@ -1014,7 +1014,7 @@ text.mark {
 }
 
 .edithint {
-  fill: rgba(lightgray, 0.5);
+  fill: color-mix(in srgb, var(--muted) 50%, transparent);
   font-size: 1em;
   font-weight: bold;
 }
