@@ -119,7 +119,8 @@
   .dropdown.is-active .dropdown-menu { display: block; }
 
   // Nur lesen: abgeschlossener Raum
-  &.nwk-lesen .nwk-karte svg { pointer-events: none; }
+  &.nwk-lesen .nwk-karte svg, &.nwk-lesen .nwk-karte svg * { pointer-events: none !important; }
+  &.nwk-lesen .panel-heading .button { display: none; }
   &.nwk-lesen .panel-heading .buttons, &.nwk-lesen .panel-block > .buttons, &.nwk-lesen #ego .button { display: none; }
 
   @media (max-width: 900px) {
@@ -129,6 +130,7 @@
     padding: 64px 10px 10px;
 
     .alteriform .form > .field.has-text-danger { display: block; }
+    .nwk-karten-hinweis { top: 26px; padding: 3px 10px; font-size: .75rem; }
     .nwk-karte { padding: 4px; }
   }
 }
