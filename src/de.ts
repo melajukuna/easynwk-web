@@ -53,24 +53,24 @@ export default {
         isolatedpersons: "Isolierte",
         personswithoutedgetotheego: "Personen ohne Kante zur Ankerperson",
         networkmsg:
-          "Anzahl der Kontakte im Netzwerk exklusive des Egos und exklusive Personen ohne Kante zum Ego (bzw. inklusive aktivierbarer Personen; d.h. Menschen, nicht verstorben)",
+          "Anzahl der Kontakte im Netzwerk ohne die Ankerperson und exklusive Personen ohne Kante zur Ankerperson (bzw. inklusive aktivierbarer Personen; d.h. Menschen, nicht verstorben)",
         closenessmsg:
-          "arithmetisches Mittel der Nähe der Kontakte zum Ego in 9 konzentrischen Ringen (9=nah … 1=entfernt)",
+          "arithmetisches Mittel der Nähe der Kontakte zur Ankerperson in 9 konzentrischen Ringen (9=nah … 1=entfernt)",
         relationshipmsg:
           "Summierte Nähe bzw. Distanz der Kontakte zur Ankerperson. Je höher die Kennzahl, umso näher stehen die Personen der Ankerperson.",
         densitymsg:
-          "Verhältnis der tatsächlich vorhandenen zu den theoretisch möglichen Verbindungen (exklusive der Verbindungen zwischen Ego und Kontaktpersonen, inklusive Personen ohne Kante zum Ego). Kennzahl liegt zwischen 0 (nur isolierte Kontakte) und 1 (jede Person im Netzwerk ist mit jeder anderen verbunden).",
+          "Verhältnis der tatsächlich vorhandenen zu den theoretisch möglichen Verbindungen (exklusive der Verbindungen zwischen Ankerperson und Kontaktpersonen, inklusive Personen ohne Kante zur Ankerperson). Kennzahl liegt zwischen 0 (nur isolierte Kontakte) und 1 (jede Person im Netzwerk ist mit jeder anderen verbunden).",
         degreemsg:
-          "arithmetisches Mittel der Verbindungen von Kontaktpersonen (exklusive der Verbindungen zwischen Ego und Kontaktpersonen, inklusive Personen ohne Kante zum Ego)",
+          "arithmetisches Mittel der Verbindungen von Kontaktpersonen (exklusive der Verbindungen zwischen Ankerperson und Kontaktpersonen, inklusive Personen ohne Kante zur Ankerperson)",
         starsmsg:
-          "Kontakt(e) mit den meisten Verbindungen im Netzwerk (exklusive Ego)",
+          "Kontakt(e) mit den meisten Verbindungen im Netzwerk (ohne Ankerperson)",
         // bridgemsg: "Anzahl der Verbindungen zwischen den Sektoren im Netzwerk",
         // bridgesmsg2:
         //   "Kontakt(e), die einzelne Sektoren im Netzwerk miteinander verbinden",
         isolatedmsg:
-          "Kontakt(e), die ausschließlich mit dem Ego verbunden sind",
+          "Kontakt(e), die ausschließlich mit der Ankerperson verbunden sind",
         noedgemsg:
-          "Lebende Personen ohne aktualisierte Verbindung zum Ego. Verbindungen mit anderen Personen im Netzwerk und damit indirekte Verbindung zum Ego sind möglich.",
+          "Lebende Personen ohne aktualisierte Verbindung zur Ankerperson. Verbindungen mit anderen Personen im Netzwerk und damit indirekte Verbindung zur Ankerperson sind möglich.",
 
         //},
         //viewOptions: {

@@ -53,23 +53,23 @@ export default {
         isolatedpersons: "Isolated person(s)",
         personswithoutedgetotheego: "People without an edge to the anchor person",
         networkmsg:
-          "Number of contacts in the network without ego and without contacts that do not have an edge to the ego",
+          "Number of contacts in the network without the anchor person and without contacts that do not have an edge to the anchor person",
         closenessmsg:
-          "arithmetic average of closeness of contacts to the ego in 9 contric rings (9=close … 1=distant)",
+          "arithmetic average of closeness of contacts to the anchor person in 9 contric rings (9=close … 1=distant)",
         relationshipmsg:
-          "Summed proximity or distance of the contacts to the ego. The higher the indicator, the closer the contacts are to the ego.",
+          "Summed proximity or distance of the contacts to the anchor person. The higher the indicator, the closer the contacts are to the anchor person.",
         densitymsg:
-          "Ratio of the actually existing connections to the theoretically possible connections (excluding connections between ego and contacts, including contacts without edge to ego). Optional: Measurement is between 0 (isolated contacts only) and 1 (every person in the network is connected to everyone else).",
+          "Ratio of the actually existing connections to the theoretically possible connections (excluding connections between the anchor person and contacts, including contacts without edge to ego). Optional: Measurement is between 0 (isolated contacts only) and 1 (every person in the network is connected to everyone else).",
         degreemsg:
-          "arithmetic average of connections of contact persons (eckluding connections to the ego, inclusive persons without edge to the ego)",
+          "arithmetic average of connections of contact persons (eckluding connections to the anchor person, inclusive persons without edge to the anchor person)",
         starsmsg:
-          "Contact(s) with most connections in the network (besides the ego)",
+          "Contact(s) with most connections in the network (besides the anchor person)",
         bridgesmsg2: "Contact(s) connecting individual sectors in the network",
         bridgemsg:
           "Amount of contact(s) connecting individual sectors in the network",
-        isolatedmsg: "Contact(s) associated exclusively with the ego",
+        isolatedmsg: "Contact(s) associated exclusively with the anchor person",
         noedgemsg:
-          "Living contacts without an updated connection to the ego. Connections with other people in the network and thus indirect connection to the ego are possible.",
+          "Living contacts without an updated connection to the anchor person. Connections with other people in the network and thus indirect connection to the anchor person are possible.",
 
         //},
         //viewOptions: {
@@ -104,7 +104,7 @@ export default {
         //egoPanel: {},
         //egoEdit: {
         ego: "Anchor person",
-        editego: "Edit ego",
+        editego: "Edit anchor person",
         name: "Name",
         genders: "Gender",
         male: "male",
@@ -112,7 +112,7 @@ export default {
         diverse: "diverse",
         notspecified: "not specified",
         age: "Age",
-        notesaboutego: "Notes about ego",
+        notesaboutego: "Notes about the anchor person",
         note: "Note",
         whoisinthecenter: "Who is at the centre of the map?",
         mandatoryfield: "Mandatory field",
@@ -132,7 +132,7 @@ export default {
         nickname: "Name or nickname",
         socialrole: "Social role of contact, options",
         altergender:
-          "biological and/or social sex; categorisation is the responsibility of the ego",
+          "biological and/or social sex; categorisation is the responsibility of the anchor person",
         category: "Category",
         positiononmap: "The position on the map still has to be determined.",
         role: "Role",
@@ -148,9 +148,9 @@ export default {
         existingtitle:
           "Relationship is currently maintained, connection updated.",
         multititle:
-          "Ego and contact person meet in several social roles. Relationship fulfills several functions.",
+          "Anchor person and contact person meet in several social roles. Relationship fulfills several functions.",
         norelationtitle:
-          "Ego and this person are currently not in contact, relationship is not updated (but ended/broken).",
+          "Anchor person and this person are currently not in contact, relationship is not updated (but ended/broken).",
         existing: "existing",
         multiplex: "multiplex",
         nocurrentrelationship: "no current relationship",
@@ -231,7 +231,7 @@ export default {
         amountClique: "Number of Cliques",
         changesizeEmoji: "Icon size: ",
         exportheading: "Save and print",
-        olderstates: "Earlier states",
+        olderstates: "Earlier versions",
         mapof: "Network map of",
         sourcenote: "Network map after Peter Pantuček-Eisenbacher. Technology based on easyNWK (St. Pölten University of Applied Sciences, MIT licence).",
       },

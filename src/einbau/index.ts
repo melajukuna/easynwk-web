@@ -1,3 +1,9 @@
+/*!
+ * easyNWK, egocentered network map for social work
+ * Copyright (c) 2020 University of Applied Sciences Sankt Pölten
+ * MIT License, https://github.com/fhstp/easynwk-web
+ * Angepasst für den Beratungsraum, https://github.com/melajukuna/easynwk-web
+ */
 // Einstieg für den Beratungsraum: hängt die Netzwerkkarte in ein Element und verbindet sie mit dem Yjs-Dokument des Raums.
 import { createApp } from "vue";
 import type * as Y from "yjs";

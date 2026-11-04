@@ -19,7 +19,7 @@ export function statisticsCSV(
 ): string {
   output = "";
   
-  output += "Name des Egos" + SEP;
+  output += "Name der Ankerperson" + SEP;
   output += "Name der Netzwerkkarte" + SEP;
   output += "Datum" + SEP;
   output += "ID" + SEP;
@@ -47,7 +47,7 @@ export function statisticsCSV(
   output += "Durchschn. Degree (SD)" + SEP;
   output += "Star(s)" + SEP;
   output += "Isolierte" + SEP;
-  output += "Personen ohne Kante zum Ego" + SEP;
+  output += "Personen ohne Kante zur Ankerperson" + SEP;
   output += "\n";
 
   for (const version of versions) {
