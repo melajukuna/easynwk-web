@@ -86,12 +86,12 @@ function getDataForKeyFigures(networkAnalysis: NetworkAnalysis, ego: string,  ti
     output += g + SEP;
     output += networkAnalysis.horizonConnectable[i] + SEP;
   }
-  output += networkAnalysis.naehenAvg.toString().replace('.', ',') + SEP;
-  output += networkAnalysis.naehenDev.toString().replace('.', ',') + SEP;
+  output += zelle(networkAnalysis.naehenAvg) + SEP;
+  output += zelle(networkAnalysis.naehenDev) + SEP;
   const density = calculateDensity(networkAnalysis.alterConnectable, networkAnalysis.intConnCount);
-  output += density.toString().replace('.', ',') + SEP;
-  output += networkAnalysis.degreeAvg.toString().replace(".", ",") + SEP;
-  output += networkAnalysis.degreeDev.toString().replace('.', ',') + SEP;
+  output += zelle(density) + SEP;
+  output += zelle(networkAnalysis.degreeAvg) + SEP;
+  output += zelle(networkAnalysis.degreeDev) + SEP;
   output += formatStars(networkAnalysis) + SEP;
   output += formatIsolated(networkAnalysis.isolated) + SEP;
   output += formatZeroEdge(networkAnalysis.alterZeroEdge) + SEP;
@@ -138,4 +138,9 @@ function formatZeroEdge(alteri: Alter[]): string {
   } else {
     return "0";
   }
+}
+
+/** Dezimalzahl für die Tabelle, ohne Wert (leerer Sektor) bleibt die Zelle leer */
+function zelle(wert: number): string {
+  return Number.isFinite(wert) ? wert.toString().replace(".", ",") : "";
 }

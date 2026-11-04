@@ -23,6 +23,8 @@
   .nwk-karte { position: relative; min-width: 0; min-height: 0; display: flex; align-items: center; justify-content: center; padding: 12px; background: var(--surface); border-radius: var(--r-lg); box-shadow: var(--shadow), 0 0 0 .5px var(--line); }
   #nwkmap { display: block; width: 100%; height: 100%; max-height: 100%; }
   #zoomBtns { position: absolute; inset-inline-end: 12px; bottom: 12px; }
+  #zoomBtns .button:disabled { visibility: hidden; }
+  .nwk-karten-hinweis { position: absolute; inset-inline: 16px; top: 40px; width: fit-content; max-width: calc(100% - 32px); margin: 0 auto; padding: 6px 14px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: var(--step--1); font-weight: 600; text-align: center; pointer-events: none; }
   #brushBtns { position: absolute; visibility: hidden; top: 0; right: 0; }
   #brushBtns > button { display: flex; margin-bottom: 6px; }
 
@@ -71,10 +73,24 @@
   .label { display: block; margin: 0; font-weight: 600; }
   .input, .textarea, .select select { display: block; width: 100%; min-height: 36px; padding: 7px 12px; border: 0; border-radius: 10px; background: var(--sunk); color: var(--ink); font: inherit; font-size: var(--step--1); }
   .textarea { min-height: 72px; resize: vertical; }
-  .input.is-danger, .textarea.is-danger { outline: 2px solid var(--crisis); }
   .select { display: block; position: relative; width: 100%; }
   .checkbox, .radio { display: inline-flex; flex-direction: row; align-items: center; gap: 6px; font-weight: 400; cursor: pointer; }
-  .radio + .radio { margin-inline-start: 10px; }
+  .radio-group { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding-top: 2px; border: 0; }
+  .field.is-horizontal:has(> .field-body input[type="checkbox"]) { align-items: center; }
+  .field.is-horizontal:has(> .field-body input[type="checkbox"]) > .field-label { padding-top: 0; }
+  .field.is-horizontal:has(> .field-body .radio-group) > .field-label { padding-top: 2px; }
+  .alteriform > .label { margin-bottom: 12px; }
+  // Neben der Karte reicht der Hinweis auf der Karte, am Handy liegt sie oft außer Sicht
+  .alteriform .form > .field.has-text-danger { display: none; color: var(--muted); }
+  .alteriform .form > .field.has-text-danger .icon { display: none; }
+  #record-settings { width: 100%; }
+  .panel-block.form > .field.is-horizontal { display: block; }
+  #record-settings .control > .field.is-horizontal:not(:has(> .field-label)) { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
+  #record-settings .button { white-space: nowrap; }
+  #record-settings br { display: none; }
+  #record-settings .control > .buttons, #record-settings .control > div > .buttons { margin-top: 10px; }
+  .alteriform .field.is-grouped { gap: 6px; }
+  .alteriform .field.is-grouped .button { padding-inline: 12px; }
   .help { margin-top: 3px; font-size: .8125rem; color: var(--muted); }
   .help.is-danger { color: var(--crisis); }
   .title { font-size: var(--step-1); font-weight: 650; }
@@ -112,12 +128,20 @@
     gap: 10px;
     padding: 64px 10px 10px;
 
+    .alteriform .form > .field.has-text-danger { display: block; }
     .nwk-karte { padding: 4px; }
   }
 }
 
 // Druckansicht: Karte und Liste liegen kurz als Kopie am Ende der Seite, alles andere bleibt aus dem Druck
 .nwk-druck { display: none; }
+// Bild und Ausdruck sind immer hell, auch wenn die Seite gerade dunkel ist (Werte wie :root in der Plattform)
+.nwk-hell {
+  --surface: #FFFFFF; --sunk: #E5E5EA; --ink: #1C1C1E; --muted: #6E6E73; --line: rgba(60, 60, 67, .18);
+  --accent: #2B5C7A; --accent-ink: #FFFFFF; --accent-soft: #E1ECF2;
+}
+.nwk.nwk-bildkopie { position: fixed; top: 0; left: -9999px; display: block; width: 800px; height: 800px; padding: 0; }
+
 @media print {
   body > :not(.nwk-druck) { display: none !important; }
   .nwk-druck { display: block; color: #000; font-size: 11pt; }

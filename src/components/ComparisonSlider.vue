@@ -99,10 +99,6 @@ export default defineComponent({
           version.id === versionId &&
           versionId !== store.state.record.currentVersion
       );
-      console.log(
-        "Click for Comparison - not yet implemented! Clicked Version: " +
-          clickedVersion
-      );
     }
 
     return {

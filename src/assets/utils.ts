@@ -19,75 +19,86 @@ export function downloadText(filename: string, text: string): void {
   );
 }
 
+/** Diese Eigenschaften braucht die Karte, um als Bild ohne die Stylesheets der Seite gleich auszusehen */
+const BILD_STILE = [
+  "fill",
+  "fill-opacity",
+  "stroke",
+  "stroke-width",
+  "stroke-opacity",
+  "stroke-dasharray",
+  "stroke-linecap",
+  "opacity",
+  "font-family",
+  "font-size",
+  "font-weight",
+  "font-style",
+  "letter-spacing",
+  "text-anchor",
+  "dominant-baseline",
+  "paint-order",
+  "stop-color",
+  "stop-opacity",
+  "vector-effect",
+];
+const BILD_PIXEL = 1600;
+
+/**
+ * Karte als PNG. Das Original hängt alle Stylesheets der Seite ins Bild, das scheitert an einer großen Seite
+ * (Zeichen wie < in Regeln machen das SVG ungültig). Deshalb eine Kopie mit festen Stilen, immer in hellen Farben.
+ */
 export function downloadSVGasPNG(filename: string, svgSelector: string): void {
-  // based on https://stackoverflow.com/a/69695782/1140589
-
   const svgElem = document.querySelector(svgSelector);
-  if (!svgElem) {
-    console.error("SVG element not found: " + svgSelector);
-    return;
-  }
+  if (!svgElem) return;
 
-  const domRect = svgElem.getBoundingClientRect();
+  const huelle = document.createElement("div");
+  huelle.className = "nwk nwk-hell nwk-bildkopie";
+  const kopie = svgElem.cloneNode(true) as SVGSVGElement;
+  kopie.querySelectorAll("#brush, #position").forEach((e) => e.remove());
+  huelle.append(kopie);
+  document.body.append(huelle);
 
-  let svgData = new XMLSerializer().serializeToString(svgElem);
-  svgData = '<?xml version="1.0" standalone="no"?>\r\n' + svgData;
-  svgData = insertStyleSheets(svgData);
+  const elemente = [kopie, ...Array.from(kopie.querySelectorAll<SVGElement>("*"))];
+  const stile = elemente.map((e) => {
+    const berechnet = getComputedStyle(e);
+    return BILD_STILE.map((n) => n + ":" + berechnet.getPropertyValue(n)).join(";");
+  });
+  elemente.forEach((e, i) => e.setAttribute("style", stile[i]));
+  huelle.remove();
 
-  // workaround a Firefox bug that cannot draw SVG of relative size
-  svgData = svgData.replace(
-    'width="100%" height="100%"',
-    'width="' + domRect.width + '" height="' + domRect.width + '"'
+  kopie.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+  kopie.setAttribute("width", String(BILD_PIXEL));
+  kopie.setAttribute("height", String(BILD_PIXEL));
+
+  const svgData = new XMLSerializer().serializeToString(kopie);
+  const svgUrl = URL.createObjectURL(
+    new Blob([svgData], { type: "image/svg+xml;charset=utf-8" })
   );
-  // downloadText(filename.replace("png", "svg"), svgData);
-
-  const svgBlob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
-  const DOMURL = window.URL || window.webkitURL || window;
-  const svgUrl = DOMURL.createObjectURL(svgBlob);
 
   const img = new Image();
   img.onload = () => {
     const canvas = document.createElement("canvas");
+    canvas.width = BILD_PIXEL;
+    canvas.height = BILD_PIXEL;
     const ctx = canvas.getContext("2d");
-    canvas.width = domRect.width;
-    canvas.height = domRect.height;
-    ctx?.drawImage(img, 0, 0, domRect.width, domRect.height);
-    DOMURL.revokeObjectURL(svgUrl);
-
-    const imgURI = canvas
-      .toDataURL("image/png")
-      .replace("image/png", "image/octet-stream");
-
-    download(filename, imgURI);
+    if (ctx) {
+      ctx.fillStyle = "#fff";
+      ctx.fillRect(0, 0, BILD_PIXEL, BILD_PIXEL);
+      ctx.drawImage(img, 0, 0, BILD_PIXEL, BILD_PIXEL);
+    }
+    URL.revokeObjectURL(svgUrl);
+    download(filename, canvas.toDataURL("image/png").replace("image/png", "image/octet-stream"));
   };
-  img.onerror = (e) => {
-    console.error("Image not loaded", e);
-  };
-
   img.src = svgUrl;
 }
 
-function insertStyleSheets(svgData: string): string {
-  // based on https://stackoverflow.com/a/41346127/1140589
-  let styleStr = "<style>";
-  for (const sheet of document.styleSheets) {
-    try {
-      // we need a try-catch block for external stylesheets that could be there...
-      styleStr += Array.prototype.reduce.call(
-        sheet.cssRules,
-        function (a, b) {
-          return a + b.cssText; // just concatenate all our cssRules' text
-        },
-        ""
-      );
-    } catch (e) {
-      console.log(e);
-    }
-  }
-  styleStr += "</style>";
-
-  // svgData.
-  return svgData.replace(/<defs([^>]*)>/, "<defs$1>" + styleStr);
-}
-
 export const SYMBOL_DECEASED = "+"; // "💀";
+
+/** Zahl mit festen Stellen in der Sprache der Seite (5,7 statt 5.7), ohne Wert ein Strich statt NaN */
+export function zahl(wert: number, stellen = 1): string {
+  if (!Number.isFinite(wert)) return "–";
+  return wert.toLocaleString(document.documentElement.lang || "de", {
+    minimumFractionDigits: stellen,
+    maximumFractionDigits: stellen,
+  });
+}

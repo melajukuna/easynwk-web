@@ -88,10 +88,10 @@ export const nwkRecordMutationsAtRoot = {
     // Zählen geht nicht mehr: Zwei Menschen können im Raum gleichzeitig Fassungen anlegen
     newVersion.id = neueId();
     if (duplicateAll) {
-      newVersion.nwk = structuredClone(state.nwk);
+      newVersion.nwk = JSON.parse(JSON.stringify(state.nwk));
     } else {
       // even a blank NWK, clones the Ego
-      newVersion.nwk.ego = structuredClone(state.nwk.ego);
+      newVersion.nwk.ego = JSON.parse(JSON.stringify(state.nwk.ego));
     }
 
     state.nwk = newVersion.nwk;

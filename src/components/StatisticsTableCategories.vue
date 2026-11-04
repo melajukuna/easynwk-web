@@ -130,6 +130,7 @@ import {
   CATEGORY_TRANSLATIONS,
   getAlterCategorization,
 } from "@/data/AlterCategories";
+import { zahl } from "@/assets/utils";
 import de from "@/de";
 import en from "@/en";
 import { HORIZON_KEYS } from "@/data/Horizon";
@@ -285,7 +286,7 @@ export default defineComponent({
       naehen: computed((): string[] =>
         categoryLabels.value.map((cat) => {
           const an = getOrInit(networkAnalysis.value, cat);
-          return an.naehenAvg.toFixed(1) + " (" + an.naehenDev.toFixed(1) + ")";
+          return zahl(an.naehenAvg) + " (" + zahl(an.naehenDev) + ")";
         })
       ),
       density,
@@ -293,7 +294,7 @@ export default defineComponent({
       degree: computed((): string[] =>
         categoryLabels.value.map((cat) => {
           const an = getOrInit(networkAnalysis.value, cat);
-          return an.degreeAvg.toFixed(1) + " (" + an.degreeDev.toFixed(1) + ")";
+          return zahl(an.degreeAvg) + " (" + zahl(an.degreeDev) + ")";
         })
       ),
 

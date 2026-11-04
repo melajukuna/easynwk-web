@@ -51,7 +51,7 @@
             {{ t("totaldensity") }}
           </th>
           <td>
-            {{ density.toFixed(3) }}
+            {{ zahl(density, 3) }}
           </td>
         </tr>
         <tr>
@@ -107,6 +107,7 @@ import {
   NetworkAnalysis,
 } from "@/data/NetworkAnalysis";
 import { getAlterCategorization } from "@/data/AlterCategories";
+import { zahl } from "@/assets/utils";
 import de from "@/de";
 import en from "@/en";
 import { HORIZON_KEYS } from "@/data/Horizon";
@@ -178,6 +179,7 @@ export default defineComponent({
     };
 
     return {
+      zahl,
       networkSize: computed(
         () =>
           networkAnalysis.value.alterConnected +
@@ -198,17 +200,17 @@ export default defineComponent({
       ),
       naehen: computed(
         () =>
-          networkAnalysis.value.naehenAvg.toFixed(1) +
+          zahl(networkAnalysis.value.naehenAvg) +
           " (" +
-          networkAnalysis.value.naehenDev.toFixed(1) +
+          zahl(networkAnalysis.value.naehenDev) +
           ")"
       ),
       density,
       degree: computed(
         () =>
-          networkAnalysis.value.degreeAvg.toFixed(1) +
+          zahl(networkAnalysis.value.degreeAvg) +
           " (" +
-          networkAnalysis.value.degreeDev.toFixed(1) +
+          zahl(networkAnalysis.value.degreeDev) +
           ")"
       ),
       stars,

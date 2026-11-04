@@ -5,9 +5,6 @@
       style="display: flex"
       @click.stop="isOpen = !isOpen"
     >
-      <span class="icon is-medium">
-        <font-awesome-icon icon="chart-bar" size="lg" />
-      </span>
       <span>{{ t("keyfigures") }}</span>
       <span style="flex: 1">&nbsp;</span>
       <span class="icon is-medium clickAble">

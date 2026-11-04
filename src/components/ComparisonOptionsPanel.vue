@@ -32,7 +32,7 @@
                 </span>
                 <button
                   class="button is-small"
-                  title="Metadaten der Karte bearbeiten"
+                  :title="t('editversiondata')"
                   v-if="isOpen"
                   @click="
                     newVersion = true;

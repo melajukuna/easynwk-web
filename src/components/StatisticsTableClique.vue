@@ -70,7 +70,6 @@ export default defineComponent({
           .map((a) => sectorIndex(a))
           .filter((d) => d !== null);
         const uniqSectorIndices = [...new Set(sectorIndices)];
-        console.log(uniqSectorIndices);
         const sectLabels = uniqSectorIndices
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           .map((d) => sectorLabels[d!])

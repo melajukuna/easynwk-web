@@ -5,6 +5,7 @@
   >
     <div id="chart" class="nwk-karte" ref="karte">
       <NetworkMap :key="sprache" @map-click="mapclick" />
+      <p v-if="fehltPosition" class="nwk-karten-hinweis">{{ t("maptext") }} {{ t("maptext2") }}</p>
     </div>
 
     <aside class="nwk-seite">
@@ -43,7 +44,7 @@
               </button>
               <button type="button" class="button is-small" @click="json">
                 <span class="icon"><font-awesome-icon icon="save" /></span>
-                <span>{{ t("save") }}</span>
+                <span>{{ t("exportdata") }}</span>
               </button>
               <button v-if="aktionen.verlauf" type="button" class="button is-small" @click="aktionen.verlauf()">
                 <span class="icon"><font-awesome-icon icon="undo" /></span>
@@ -101,6 +102,7 @@ import StatisticsPanel from "@/components/StatisticsPanel.vue";
 import SupportPanel from "@/components/SupportPanel.vue";
 import UndoRedo from "@/components/UndoRedo.vue";
 import ViewOptionsPanel from "@/components/ViewOptionsPanel.vue";
+import { TAB_BASE } from "@/store/sessionModule";
 import type { Alter } from "@/data/Alter";
 
 export default defineComponent({
@@ -145,7 +147,7 @@ export default defineComponent({
     /** Karte und Liste kurz in den Fuß der Seite kopieren, alles andere blendet das Druckbild aus (thema.scss) */
     druck() {
       const kopie = document.createElement("div");
-      kopie.className = "nwk-druck";
+      kopie.className = "nwk-druck nwk-hell";
       const liste = (this.$refs.druckliste as HTMLElement).cloneNode(true) as HTMLElement;
       liste.hidden = false;
       const karte = document.querySelector("#nwkmap")?.cloneNode(true);
@@ -194,6 +196,11 @@ export default defineComponent({
       egoEditMode,
       exportOffen,
       version,
+      fehltPosition: computed(() => {
+        const s = store.state.session;
+        if (s.editIndex == null || s.editTab !== TAB_BASE) return false;
+        return !(store.state.nwk.alteri[s.editIndex]?.distance > 0);
+      }),
       sprache: document.documentElement.lang,
       ego: computed(() => store.state.nwk.ego),
       alteri: computed(() => store.state.nwk.alteri),

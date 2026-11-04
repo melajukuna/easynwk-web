@@ -49,8 +49,6 @@ export class PseudonymGenerator {
   }
 
   public reset(): void {
-    console.log(this.indexByAbbrev.size);
     this.indexByAbbrev.clear();
-    console.log(this.indexByAbbrev.size);
   }
 }

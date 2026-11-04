@@ -86,10 +86,6 @@
 
     <NetworkMapCoordinates :transform="transform" />
 
-    <text v-if="isEditMode" text-anchor="middle" class="edithint">
-      <tspan x="0" y="-1em">{{ t("maptext") }}</tspan>
-      <tspan x="0" dy="2em">{{ t("maptext2") }}</tspan>
-    </text>
 
     <g id="marksBackgroundLayer">
       <g v-for="mark in filteredAlteriMarks" :key="'shadow' + mark.d.id">
@@ -475,22 +471,20 @@ export default defineComponent({
       g.on("click", (event) => {
         const posPol = getPositionPolar(event);
         if (clickBackgroundTimeoutId == null) {
-          // first click -> start timer
+          // Im Termin soll der Punkt sofort sitzen: Erster Klick setzt die Position,
+          // der Zeitgeber merkt sich nur noch, ob ein zweiter Klick dazukommt
           clickBackgroundTimeoutId = setTimeout(() => {
-            // timeout expired -> simple click
             clickBackgroundTimeoutId = null;
-
-            if (isEditMode.value) {
-              const payload = {
-                index: store.state.session.editIndex,
-                changes: posPol,
-              };
-              store.commit("editAlter", payload);
-              // } else {
-              //   store.commit("session/clearSelectedAlters");
-            }
-            emit("map-click", posPol);
           }, 500); //tolerance in ms
+
+          if (isEditMode.value) {
+            const payload = {
+              index: store.state.session.editIndex,
+              changes: posPol,
+            };
+            store.commit("editAlter", payload);
+          }
+          emit("map-click", posPol);
         } else {
           // 2nd click -> double click
           clearTimeout(clickBackgroundTimeoutId);
@@ -591,7 +585,6 @@ export default defineComponent({
           // brush center in absolute coordinates
           const tx = transform.value.invertX((x0 + x1) / 2);
           const ty = transform.value.invertY((y0 + y1) / 2);
-          console.log(`k: ${k}  t.x: ${tx}   t.y: ${ty}`);
 
           const nextTransform = new ZoomTransform(k, tx * k * -1, ty * k * -1);
           d3.select("#nwkmap")
@@ -746,20 +739,17 @@ export default defineComponent({
         }
       } else {
         if (clickTimeoutId == null) {
+          // Erster Klick wählt sofort aus, der Zeitgeber merkt sich nur den Doppelklick
           clickTimeoutId = setTimeout(() => {
-            // simple click
             clickTimeoutId = null;
-            console.log(alter.name + " clicked");
-
-            // toggleSelection
-            store.commit("session/selectSingleAlter", alter.id);
           }, 500); //tolerance in ms
+
+          // toggleSelection
+          store.commit("session/selectSingleAlter", alter.id);
         } else {
           // double click
           clearTimeout(clickTimeoutId);
           clickTimeoutId = null;
-          console.log(alter.name + " dblclick");
-          console.log("Text here");
 
           // open form
           store.commit("openAlterFormById", { alterId: alter.id });
@@ -1011,12 +1001,6 @@ use.mark {
 
 text.mark {
   text-anchor: middle;
-}
-
-.edithint {
-  fill: color-mix(in srgb, var(--muted) 50%, transparent);
-  font-size: 1em;
-  font-weight: bold;
 }
 
 #brushBtns {
